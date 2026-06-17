@@ -1,6 +1,6 @@
 # NexusMart — Enterprise-Grade Modular Django E-Commerce Platform
 
-Welcome to **NexusMart**, a modern, fully rebranded, production-ready Django e-commerce platform designed for maximum performance, security, and scalability. This project is built using a modular application architecture and optimized to run on enterprise infrastructure.
+Welcome to **NexusMart**, a modern, fully rebranded, production-ready Django e-commerce platform designed for maximum performance, security, and scalability. This project is built using a modular application architecture and optimized to run on enterpris infrastructure.
 
 ---
 
