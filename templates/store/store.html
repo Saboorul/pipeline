@@ -1,0 +1,269 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+  
+<!-- ========================= SECTION PAGETOP ========================= -->
+<section class="section-pagetop bg" style="background-color: rgb(152, 207, 238);">
+<div class="container">
+	<h2 class="title-page">Our Store</h2>
+	
+</div> <!-- container //  -->
+</section>
+
+<!-- ========================= SECTION INTRO END// ========================= -->
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-content padding-y" style="background-image: url('{% static "images/4.jpg" %}') ;">
+    <div class="container">
+    
+    <div class="row">
+        <aside class="col-md-3">
+            
+    <div class="card">
+        <article class="filter-group">
+            <header class="card-header">
+                <a href="#" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true" class="">
+                    <i class="icon-control fa fa-chevron-down"></i>
+                    <h6 class="title">Categories</h6>
+                </a>
+            </header>
+            <div class="filter-content collapse show" id="collapse_1" >
+                <div class="card-body">
+                   
+                    <ul class="list-menu">
+                        <li><a href="/store">All Products</a></li>
+                        {% for cate in category %}
+                         <li><a href="{{cate.get_url}}">{{cate.category_name}}</a></li>
+                        {% endfor %}
+                    </ul>
+                 
+                </div> <!-- card-body.// -->
+            </div>
+        </article> <!-- filter-group  .// -->
+        <article class="filter-group">
+            <header class="card-header">
+                <a href="#" data-toggle="collapse" data-target="#collapse_4" aria-expanded="true" class="">
+                    <i class="icon-control fa fa-chevron-down"></i>
+                    <h6 class="title">Sizes </h6>
+                </a>
+            </header>
+            <div class="filter-content collapse show" id="collapse_4" >
+                <div class="card-body">
+                  <label class="checkbox-btn">
+                    <input type="checkbox">
+                    <span class="btn btn-light"> XS </span>
+                  </label>
+    
+                  <label class="checkbox-btn">
+                    <input type="checkbox">
+                    <span class="btn btn-light"> SM </span>
+                  </label>
+    
+                  <label class="checkbox-btn">
+                    <input type="checkbox">
+                    <span class="btn btn-light"> LG </span>
+                  </label>
+    
+                  <label class="checkbox-btn">
+                    <input type="checkbox">
+                    <span class="btn btn-light"> XXL </span>
+                  </label>
+            </div><!-- card-body.// -->
+            </div>
+        </article> <!-- filter-group .// -->
+        
+        <article class="filter-group">
+            <header class="card-header">
+                <a href="#" data-toggle="collapse" data-target="#collapse_3" aria-expanded="true" class="">
+                    <i class="icon-control fa fa-chevron-down"></i>
+                    <h6 class="title">Price range </h6>
+                </a>
+            </header>
+            <div class="filter-content collapse show" id="collapse_3" >
+                <div class="card-body">
+                    
+                    <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <label>Min</label>
+                      <!-- <input class="form-control" placeholder="$0" type="number"> -->
+                          <select class="mr-2 form-control">
+                            <option value="0">$0</option>
+                            <option value="50">$50</option>
+                            <option value="100">$100</option>
+                            <option value="150">$150</option>
+                            <option value="200">$200</option>
+                            <option value="500">$500</option>
+                            <option value="1000">$1000</option>
+                        </select>
+                    </div>
+                    <div class="form-group text-right col-md-6">
+                      <label>Max</label>
+                          <select class="mr-2 form-control">
+                            <option value="50">$50</option>
+                            <option value="100">$100</option>
+                            <option value="150">$150</option>
+                            <option value="200">$200</option>
+                            <option value="500">$500</option>
+                            <option value="1000">$1000</option>
+                            <option value="2000">$2000+</option>
+                        </select>
+                    </div>
+                    </div> <!-- form-row.// -->
+                    <button class="btn btn-block btn-primary">Apply</button>
+                </div><!-- card-body.// -->
+            </div>
+        </article> <!-- filter-group .// -->
+        
+    </div> <!-- card.// -->
+    
+        </aside> <!-- col.// -->
+        <main class="col-md-8">
+    
+    <header class="border-bottom mb-0 pb-0">
+            <div class="form-inline">
+                <span class="mr-md-auto"><b>{{p_count}}</b> Items found </span>
+                
+            </div>
+    </header><!-- sect-heading -->
+    <br>
+    <div class="row">
+        {% if products %}
+        {% for product in products %}
+        
+        <div class="col-md-4">
+            <figure class="card card-product-grid">
+                
+                <div class="img-wrap"> 
+                    <div class="first">
+                        <div class="d-flex justify-content-between align-items-center"> <span class="discount">-25%</span> <span id = "heart" pid="{{product.id}}" class="wishlist"><a href="#" id="click-heart" ><i class="fa fa-heart" style="color : red"></i></a></span> </div>
+                    </div>
+                    {% if product.images %}
+                          <a href="{{product.get_url}}"><img src="{{ product.images.url}}"></a>
+                    {% else %}
+                          <a href="{{product.get_url}}"><img src="{% static 'images/banners/1.jpg' %}"></a>
+                    {% endif %}
+                        
+                </div> <!-- img-wrap.// -->
+                <figcaption class="info-wrap">
+                    <div class="fix-height">
+                        <a href="{{product.get_url}}" class="title">{{ product.product_name }}</a>
+                        <div class="price-wrap mt-2">
+                            <span class="price">Rs. {{ product.price }}</span>
+                            <del class="price-old">Rs. 1980</del>
+                        </div> <!-- price-wrap.// -->
+                    </div>
+                    {% if product.stock > 1 and product.is_available and product.is_active %}
+                    <!-- <p>{{cart}}</p> -->
+                       {% if product.id in cart %}
+                               <a href="{% url 'cart' %}" class="btn btn-block btn-success">Added to cart </a>
+
+                       {% else%}
+                              
+                               <a href="{{product.cart_get_url}}" class="btn btn-block btn-success">Add to cart </a>
+                       {% endif %}
+                    {% else %}
+                       
+                         <a  class="btn btn-block btn-warning"  >Out of stock </a>
+                    
+                    {% endif %}
+                </figcaption>
+            </figure>
+        </div> <!-- col.// -->
+        {% endfor %}
+        {% else %}
+        <div>
+            <br>
+            <h2>No result found.  Please try again.</h2>
+        </div>
+        {% endif %}
+        
+    </div> <!-- row end.// -->
+    
+    
+    <nav class="mt-4" aria-label="Page navigation sample">
+        {% if products.has_other_pages %}
+            <ul class="pagination">
+                    {% if products.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page={{products.previous_page_number}}">Previous</a></li>
+                    {% else %}
+                    <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                    {% endif %}
+
+                    {% for i in products.paginator.page_range %}
+                        {% if products.number == i %}
+                            <li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+                        {% else %}
+                            <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if products.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{products.next_page_number}}">Next</a></li>
+                    {% else %}
+                        <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+                    {% endif %}
+            </ul>
+
+        {% endif %}
+    </nav>
+    
+        </main> <!-- col.// -->
+    
+    </div>
+    
+    </div> <!-- container .//  -->
+    </section>
+    <!-- ========================= SECTION CONTENT END// ========================= -->
+    
+    <script>
+    
+        $(document).ready(function(){
+
+            // var pid= $("#heart").attr("pid");
+            // console.log(pid)
+            $('#click-heart').click(function(){
+                 console.log('clickedd')
+                // $('#display_advance').toggle('1000');
+                $("i", this).toggleClass("fa fa-heart-o  fa fa-heart");
+
+            })
+
+            var data={
+                price : '9000',
+            }
+
+            var num = 1
+
+            var token = '{{ csrf_token }}';
+
+            $.ajax( {
+                headers: { "X-CSRFToken": token },
+                url: 'http://127.0.0.1:8000/api/product/'+num+'/',
+                dataType: "json",
+                type: 'PATCH',
+                data : JSON.stringify(data),
+                contentType : 'application/json',
+                processData: false,
+                beforeSend: function(){
+                    // Code to run before ajax call
+                    console.log("BEFORE SEND");
+                    
+                    // $(".loader").show(1000);
+                },
+                complete: function(){
+                    // Code to run before ajax call
+                    console.log("completed++");
+                },
+                success: function(data){
+
+                    // console.log(data)
+                }
+                
+                });
+        });
+        
+    </script
+
+{% endblock content %}

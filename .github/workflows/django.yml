@@ -1,0 +1,71 @@
+name: NexusMart CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint-and-scan:
+    name: Code Quality & Security Scan
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+        
+    - name: Install Linting & Security Tools
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 black bandit
+        
+    - name: Check Code Format with Black
+      run: |
+        black --check --line-length 127 .
+        
+    - name: Lint with Flake8
+      run: |
+        # Stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # Exit-zero treats all other flake8 warnings/errors as warnings
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+        
+    - name: Security Scan with Bandit
+      run: |
+        # Run bandit security check, ignoring venv and tests
+        bandit -r . -x ./venv
+
+  test:
+    name: Run Migrations & Test Suite
+    needs: lint-and-scan
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+        
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        
+    - name: Run Migrations
+      run: python manage.py migrate
+      env:
+        DEBUG: True
+        SECRET_KEY: 'ci-secret-key-placeholder'
+        
+    - name: Run Tests
+      run: python manage.py test
+      env:
+        DEBUG: True
+        SECRET_KEY: 'ci-secret-key-placeholder'
